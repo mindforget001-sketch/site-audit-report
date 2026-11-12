@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#15181B">
+<title>JINNUO 独立站技术检验报告 · jinnuoparts.com</title>
+<meta name="description" content="瑞安市金诺汽配有限公司英文外贸站 jinnuoparts.com 的技术检验报告：28 项实测缺陷、资源重量解剖、性能拆解与整改路线图。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+:root{
+  --paper:#F5F2EC; --paper2:#EBE6DC; --ink:#15181B; --ink2:#39414A;
+  --muted:#7B838D; --rule:#D5CEC1; --rule2:#C2B9A8;
+  --blue:#1B4D8F; --stamp:#B33A2B; --amber:#E0A33C;
+  --disp:'Barlow Condensed','Microsoft YaHei','PingFang SC',sans-serif;
+  --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+  --body:'IBM Plex Sans','Microsoft YaHei','PingFang SC',sans-serif;
+  --bar:54px;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);font-family:var(--body)}
+
+/* page scrollbar in the report's own palette */
+*{scrollbar-width:thin;scrollbar-color:var(--rule2) var(--paper2)}
+::-webkit-scrollbar{width:12px;height:10px}
+::-webkit-scrollbar-track{background:var(--paper2)}
+::-webkit-scrollbar-thumb{background:var(--rule2);border:3px solid var(--paper2)}
+::-webkit-scrollbar-thumb:hover{background:var(--blue)}
+::-webkit-scrollbar-corner{background:var(--paper2)}
+
+.topbar{position:sticky;top:0;z-index:200;height:var(--bar);background:var(--ink);
+  display:flex;align-items:center;gap:16px;padding:0 20px;border-bottom:1px solid #2C3238}
+.tb-brand{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-size:19px;
+  font-weight:700;color:#F7F4EE;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.tb-dot{width:7px;height:7px;background:var(--amber);border-radius:50%;flex:none;
+  box-shadow:0 0 0 3px rgba(224,163,60,.18)}
+.tb-brand small{font-family:var(--mono);font-size:10px;color:#7E8894;letter-spacing:.14em;font-weight:400}
+.tb-nav{display:flex;gap:1px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.tb-nav::-webkit-scrollbar{display:none}
+.tb-nav a{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:#9AA5B1;
+  text-decoration:none;padding:7px 10px;white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s,background .15s}
+.tb-nav a:hover{color:#F7F4EE;background:#22272C}
+.tb-nav a.on{color:var(--amber);border-bottom-color:var(--amber)}
+.tb-copy{font-family:var(--mono);font-size:11px;padding:7px 13px;background:transparent;
+  color:var(--amber);border:1px solid var(--amber);cursor:pointer;white-space:nowrap;transition:all .15s;flex:none}
+.tb-copy:hover{background:var(--amber);color:var(--ink)}
+.tb-copy.done{background:#2C6E52;border-color:#2C6E52;color:#fff}
+.tb-prog{position:fixed;top:var(--bar);left:0;height:2px;background:var(--amber);width:0;z-index:201;transition:width .1s linear}
+
+/* keep sticky rail and anchor targets clear of the fixed bar.
+   body-prefixed so this outranks the report's own stylesheet, which loads later in <body> */
+body .jn-audit .rail{top:calc(var(--bar) + 16px)}
+.jn-audit .main,.jn-audit .blksec{scroll-margin-top:calc(var(--bar) + 14px)}
+/* the report's .band-in / .main set vertical-only padding, cancelling .wrap's gutters */
+body .jn-audit .band-in,body .jn-audit .main{padding-left:22px;padding-right:22px}
+
+/* dark code regions get their own scrollbar treatment */
+.jn-audit .ev,.jn-audit .snip pre,.jn-audit .verify pre{scrollbar-color:#4A535C #22272C}
+.jn-audit .ev::-webkit-scrollbar,.jn-audit .snip pre::-webkit-scrollbar,.jn-audit .verify pre::-webkit-scrollbar{height:8px;width:8px}
+.jn-audit .ev::-webkit-scrollbar-track,.jn-audit .snip pre::-webkit-scrollbar-track,.jn-audit .verify pre::-webkit-scrollbar-track{background:#22272C}
+.jn-audit .ev::-webkit-scrollbar-thumb,.jn-audit .snip pre::-webkit-scrollbar-thumb,.jn-audit .verify pre::-webkit-scrollbar-thumb{background:#4A535C;border:2px solid #22272C}
+.jn-audit .ev::-webkit-scrollbar-thumb:hover,.jn-audit .snip pre::-webkit-scrollbar-thumb:hover,.jn-audit .verify pre::-webkit-scrollbar-thumb:hover{background:var(--amber)}
+
+@media(max-width:900px){
+  .topbar{padding:0 14px;gap:10px}
+  .tb-nav{display:none}
+  .tb-brand small{display:none}
+  .tb-copy{margin-left:auto}
+  body .jn-audit .band-in,body .jn-audit .main{padding-left:14px;padding-right:14px}
+}
+@media print{
+  .topbar,.tb-prog{display:none!important}
+  .jn-audit .rail{display:none}
+  .jn-audit .main{grid-template-columns:1fr}
+  .jn-audit .f-b{display:block!important}
+  .jn-audit .caret{display:none}
+  .jn-audit{background:#fff}
+  .jn-audit .band{background:#fff;color:#000}
+  .jn-audit .band h1,.jn-audit .dial-n{color:#000}
+  .jn-audit .rv{opacity:1!important;transform:none!important}
+  .jn-audit .f{break-inside:avoid}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="tb-brand"><span class="tb-dot"></span>JINNUO 站点检验<small>2026-11-12</small></div>
+  <nav class="tb-nav" id="tbNav" aria-label="报告章节"></nav>
+  <button class="tb-copy" id="tbCopy" type="button">复制链接</button>
+</header>
+<div class="tb-prog" id="tbProg"></div>
+<div class="jn-audit-shell">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+.jn-audit *{margin:0;padding:0;box-sizing:border-box}
+.jn-audit{
+  --paper:#F5F2EC; --paper2:#EBE6DC; --paper3:#E0D9CC;
+  --ink:#15181B; --ink2:#39414A; --muted:#7B838D;
+  --rule:#D5CEC1; --rule2:#C2B9A8;
+  --blue:#1B4D8F; --blue-soft:#E3EAF3;
+  --stamp:#B33A2B; --stamp-soft:#F6E4E0;
+  --amber:#B26A00; --amber-soft:#F7EBD8;
+  --ok:#2C6E52; --ok-soft:#E0EDE6;
+  --disp:'Barlow Condensed','Microsoft YaHei','PingFang SC',sans-serif;
+  --body:'IBM Plex Sans','Microsoft YaHei','PingFang SC',sans-serif;
+  --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+  font-family:var(--body); background:var(--paper); color:var(--ink);
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--rule) 1px,transparent 1px),linear-gradient(90deg,var(--rule) 1px,transparent 1px);
+  background-size:56px 56px; background-position:-1px -1px;
+}
+.jn-audit .wrap{max-width:1280px;margin:0 auto;padding:0 22px}
+.jn-audit .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.jn-audit h1,.jn-audit h2,.jn-audit h3,.jn-audit .disp{font-family:var(--disp);font-weight:700;letter-spacing:.01em;line-height:1.05}
+
+/* ── instrument band ── */
+.jn-audit .band{background:var(--ink);color:#EDE9E1;position:relative;overflow:hidden}
+.jn-audit .band::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 7px)}
+.jn-audit .band-in{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:38px;padding:34px 0 30px;position:relative;z-index:1}
+.jn-audit .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#8E9AA8}
+.jn-audit .band h1{font-size:clamp(34px,5.2vw,60px);text-transform:uppercase;margin:10px 0 4px;color:#F7F4EE}
+.jn-audit .band h1 em{font-style:normal;color:#E0A33C}
+.jn-audit .subj{font-family:var(--mono);font-size:13px;color:#A9B4C0;margin-bottom:20px;word-break:break-all}
+.jn-audit .spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:1px;background:#2C3238;border:1px solid #2C3238}
+.jn-audit .spec div{background:#1B1F23;padding:9px 11px}
+.jn-audit .spec dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#7E8894;margin-bottom:3px}
+.jn-audit .spec dd{font-family:var(--mono);font-size:13px;color:#E6E1D8;font-weight:500}
+.jn-audit .spec dd.warn{color:#E0A33C}
+
+.jn-audit .verdict{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:14px}
+.jn-audit .dial{position:relative;width:172px;height:172px}
+.jn-audit .dial svg{transform:rotate(-90deg)}
+.jn-audit .dial-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.jn-audit .dial-n{font-family:var(--disp);font-size:58px;font-weight:700;color:#F7F4EE;line-height:.9}
+.jn-audit .dial-n span{font-size:20px;color:#7E8894}
+.jn-audit .dial-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:#7E8894;text-transform:uppercase;margin-top:5px}
+.jn-audit .stamp{font-family:var(--disp);font-size:21px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#E8705C;border:2.5px solid #E8705C;padding:6px 15px;transform:rotate(-3.5deg);border-radius:3px;
+  box-shadow:inset 0 0 0 1px rgba(232,112,92,.3)}
+
+/* ── summary strip ── */
+.jn-audit .strip{border-bottom:1px solid var(--rule2);background:var(--paper2)}
+.jn-audit .strip-in{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0}
+.jn-audit .kpi{padding:16px 18px;border-right:1px solid var(--rule)}
+.jn-audit .kpi:last-child{border-right:0}
+.jn-audit .kpi b{display:block;font-family:var(--disp);font-size:31px;font-weight:700;line-height:1;color:var(--ink)}
+.jn-audit .kpi b.bad{color:var(--stamp)} .jn-audit .kpi b.mid{color:var(--amber)}
+.jn-audit .kpi small{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* ── layout ── */
+.jn-audit .main{display:grid;grid-template-columns:236px minmax(0,1fr);gap:30px;padding:28px 0 10px;align-items:start}
+.jn-audit .rail{position:sticky;top:16px}
+.jn-audit .rail-h{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  padding-bottom:7px;border-bottom:1.5px solid var(--ink);margin-bottom:10px}
+.jn-audit .dim{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;padding:8px 9px;
+  border-left:2.5px solid transparent;transition:background .16s,border-color .16s;font-family:var(--body)}
+.jn-audit .dim:hover{background:var(--paper2)}
+.jn-audit .dim.on{background:var(--blue-soft);border-left-color:var(--blue)}
+.jn-audit .dim-t{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.jn-audit .dim-n{font-size:13px;font-weight:600;color:var(--ink2)}
+.jn-audit .dim.on .dim-n{color:var(--blue)}
+.jn-audit .dim-s{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink)}
+.jn-audit .bar{height:3px;background:var(--paper3);margin-top:6px;overflow:hidden}
+.jn-audit .bar i{display:block;height:100%;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.jn-audit .filters{margin-top:20px}
+.jn-audit .chips{display:flex;flex-wrap:wrap;gap:5px}
+.jn-audit .chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:5px 9px;border:1px solid var(--rule2);
+  background:var(--paper);cursor:pointer;transition:all .15s;color:var(--ink2)}
+.jn-audit .chip:hover{border-color:var(--ink)}
+.jn-audit .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.jn-audit .search{width:100%;margin-top:14px;padding:8px 10px;border:1px solid var(--rule2);background:var(--paper);
+  font-family:var(--mono);font-size:12px;color:var(--ink);outline:none}
+.jn-audit .search:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.jn-audit .rail-act{display:flex;gap:6px;margin-top:12px}
+.jn-audit .mini{flex:1;font-family:var(--mono);font-size:10px;padding:6px;border:1px solid var(--rule2);background:var(--paper);cursor:pointer;color:var(--ink2)}
+.jn-audit .mini:hover{background:var(--ink);color:var(--paper)}
+
+/* ── findings ── */
+.jn-audit .list-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:2px}
+.jn-audit .list-h h2{font-size:25px;text-transform:uppercase}
+.jn-audit .count{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.jn-audit .f{border-bottom:1px solid var(--rule);background:var(--paper);transition:background .16s}
+.jn-audit .f:hover{background:#FAF8F4}
+.jn-audit .f-h{display:grid;grid-template-columns:56px 74px minmax(0,1fr) 84px 22px;gap:12px;align-items:center;
+  padding:13px 10px;cursor:pointer;user-select:none}
+.jn-audit .fid{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--muted)}
+.jn-audit .sev{font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  text-align:center;padding:3px 0;border:1px solid;border-radius:2px}
+.jn-audit .sev.crit{color:var(--stamp);border-color:var(--stamp);background:var(--stamp-soft)}
+.jn-audit .sev.high{color:var(--amber);border-color:var(--amber);background:var(--amber-soft)}
+.jn-audit .sev.med{color:var(--blue);border-color:var(--blue);background:var(--blue-soft)}
+.jn-audit .sev.low{color:var(--ok);border-color:var(--ok);background:var(--ok-soft)}
+.jn-audit .f-t{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.4}
+.jn-audit .f-d{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:right;letter-spacing:.04em}
+.jn-audit .caret{font-family:var(--mono);font-size:13px;color:var(--muted);transition:transform .22s;text-align:center}
+.jn-audit .f.open .caret{transform:rotate(90deg)}
+.jn-audit .f-b{display:none;padding:2px 10px 20px 78px}
+.jn-audit .f.open .f-b{display:block;animation:slideIn .26s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+.jn-audit .blk{margin-bottom:13px}
+.jn-audit .blk-l{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.jn-audit .blk p{font-size:13.5px;color:var(--ink2);line-height:1.65}
+.jn-audit .ev{font-family:var(--mono);font-size:11.5px;line-height:1.7;background:var(--ink);color:#C8D2DC;
+  padding:11px 13px;overflow-x:auto;border-left:3px solid var(--amber);white-space:pre-wrap;word-break:break-word}
+.jn-audit .ev b{color:#E0A33C;font-weight:600}
+.jn-audit .fix{background:var(--ok-soft);border-left:3px solid var(--ok);padding:11px 13px;font-size:13.5px;color:#1F4D3A;line-height:1.65}
+.jn-audit .eff{display:inline-block;font-family:var(--mono);font-size:10.5px;background:var(--paper2);border:1px solid var(--rule2);padding:2px 8px;color:var(--ink2)}
+.jn-audit .empty{padding:44px 10px;text-align:center;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+
+/* ── sections ── */
+.jn-audit section.blksec{padding:36px 0;border-top:1px solid var(--rule2);margin-top:26px}
+.jn-audit .sec-h{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.jn-audit .sec-n{font-family:var(--mono);font-size:11px;color:var(--stamp);font-weight:600}
+.jn-audit .sec-h h2{font-size:clamp(24px,3.2vw,34px);text-transform:uppercase}
+.jn-audit .sec-sub{font-size:13.5px;color:var(--muted);margin-bottom:22px;max-width:74ch}
+
+.jn-audit .wrow{display:grid;grid-template-columns:210px minmax(0,1fr) 88px;gap:14px;align-items:center;padding:7px 0;border-bottom:1px dotted var(--rule)}
+.jn-audit .wname{font-family:var(--mono);font-size:11.5px;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jn-audit .wtrack{height:15px;background:var(--paper2);position:relative;overflow:hidden}
+.jn-audit .wfill{height:100%;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.jn-audit .wval{font-family:var(--mono);font-size:11.5px;text-align:right;font-weight:500}
+.jn-audit .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.jn-audit .legend i{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
+.jn-audit .callout{margin-top:20px;background:var(--ink);color:#EDE9E1;padding:18px 20px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.jn-audit .callout b{font-family:var(--disp);font-size:40px;color:#E0A33C;line-height:1}
+.jn-audit .callout p{font-size:13.5px;color:#B6C0CA;flex:1;min-width:240px}
+
+.jn-audit .perf{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--rule2);border:1px solid var(--rule2)}
+.jn-audit .pcell{background:var(--paper);padding:16px}
+.jn-audit .pcell .pl{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.jn-audit .pcell .pv{font-family:var(--disp);font-size:36px;font-weight:700;line-height:1.1;margin:5px 0}
+.jn-audit .pcell .pn{font-size:12px;color:var(--ink2);line-height:1.5}
+.jn-audit .pv.bad{color:var(--stamp)} .jn-audit .pv.mid{color:var(--amber)} .jn-audit .pv.good{color:var(--ok)}
+
+.jn-audit .road{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.jn-audit .rcol{border:1px solid var(--rule2);background:var(--paper)}
+.jn-audit .rhead{padding:12px 15px;border-bottom:1px solid var(--rule2);display:flex;justify-content:space-between;align-items:center}
+.jn-audit .rhead.p0{background:var(--stamp-soft)} .jn-audit .rhead.p1{background:var(--amber-soft)} .jn-audit .rhead.p2{background:var(--blue-soft)}
+.jn-audit .rhead h3{font-size:20px;text-transform:uppercase}
+.jn-audit .rhead span{font-family:var(--mono);font-size:10.5px;color:var(--ink2)}
+.jn-audit .rcol ul{list-style:none;padding:8px 15px 15px}
+.jn-audit .rcol li{font-size:13px;color:var(--ink2);padding:7px 0 7px 16px;position:relative;border-bottom:1px dotted var(--rule);line-height:1.5}
+.jn-audit .rcol li:last-child{border-bottom:0}
+.jn-audit .rcol li::before{content:"▸";position:absolute;left:0;color:var(--muted);font-size:11px}
+.jn-audit .rcol li code{font-family:var(--mono);font-size:11px;background:var(--paper2);padding:1px 4px;color:var(--ink)}
+
+.jn-audit .snip{border:1px solid var(--rule2);margin-bottom:14px;background:var(--paper)}
+.jn-audit .snip-h{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--rule);background:var(--paper2)}
+.jn-audit .snip-t{font-size:13.5px;font-weight:600}
+.jn-audit .snip-t code{font-family:var(--mono);font-size:11.5px;color:var(--stamp);margin-right:7px}
+.jn-audit .copy{font-family:var(--mono);font-size:10.5px;padding:5px 11px;border:1px solid var(--ink);background:var(--paper);cursor:pointer;transition:all .15s;white-space:nowrap}
+.jn-audit .copy:hover{background:var(--ink);color:var(--paper)}
+.jn-audit .copy.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.jn-audit .snip pre{font-family:var(--mono);font-size:11.5px;line-height:1.75;padding:13px 14px;overflow-x:auto;background:var(--ink);color:#C8D2DC;white-space:pre}
+.jn-audit .snip pre .c{color:#7E8894} .jn-audit .snip pre .k{color:#E0A33C} .jn-audit .snip pre .s{color:#8FC7A8}
+
+.jn-audit .verify{background:var(--paper2);border:1px solid var(--rule2);padding:18px 20px}
+.jn-audit .verify h3{font-size:19px;text-transform:uppercase;margin-bottom:8px}
+.jn-audit .verify p{font-size:13px;color:var(--ink2);margin-bottom:12px;max-width:80ch}
+.jn-audit .verify pre{font-family:var(--mono);font-size:11.5px;background:var(--ink);color:#C8D2DC;padding:12px 14px;overflow-x:auto;line-height:1.8}
+.jn-audit footer{border-top:1.5px solid var(--ink);margin-top:34px;padding:20px 0 40px;font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.9}
+.jn-audit footer a{color:var(--blue);text-decoration:none;border-bottom:1px solid var(--blue-soft)}
+.jn-audit footer a:hover{border-bottom-color:var(--blue)}
+
+.jn-audit .rv{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1)}
+.jn-audit .rv.in{opacity:1;transform:none}
+
+@media(max-width:900px){
+  .jn-audit .band-in{grid-template-columns:1fr;gap:24px}
+  .jn-audit .verdict{align-items:flex-start;flex-direction:row;justify-content:space-between;width:100%}
+  .jn-audit .main{grid-template-columns:1fr}
+  .jn-audit .rail{position:static}
+  .jn-audit .f-h{grid-template-columns:48px 66px minmax(0,1fr) 20px;gap:9px}
+  .jn-audit .f-d{display:none}
+  .jn-audit .f-b{padding-left:12px}
+  .jn-audit .wrow{grid-template-columns:130px minmax(0,1fr) 74px;gap:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  .jn-audit *{animation:none!important;transition:none!important}
+  .jn-audit .rv{opacity:1;transform:none}
+}
+</style>
+
+<div class="jn-audit">
+  <div class="band">
+    <div class="wrap band-in">
+      <div>
+        <div class="eyebrow">Site Inspection Report · 独立站技术检验单</div>
+        <h1>JINNUO <em>站点体检</em></h1>
+        <div class="subj">jinnuoparts.com · 瑞安市金诺汽配有限公司</div>
+        <dl class="spec">
+          <div><dt>检验日期</dt><dd>2026-11-12</dd></div>
+          <div><dt>域名注册</dt><dd class="warn">2026-11-04</dd></div>
+          <div><dt>站龄</dt><dd class="warn">8 天</dd></div>
+          <div><dt>技术栈</dt><dd>WP · Astra · Woo</dd></div>
+          <div><dt>抽样页面</dt><dd>52 URL</dd></div>
+          <div><dt>检出缺陷</dt><dd class="warn" id="jnTotal">28 项</dd></div>
+        </dl>
+      </div>
+      <div class="verdict">
+        <div class="dial">
+          <svg width="172" height="172" viewBox="0 0 172 172">
+            <circle cx="86" cy="86" r="74" fill="none" stroke="#2C3238" stroke-width="11"/>
+            <circle id="jnArc" cx="86" cy="86" r="74" fill="none" stroke="#E0A33C" stroke-width="11"
+                    stroke-linecap="butt" stroke-dasharray="465" stroke-dashoffset="465"/>
+          </svg>
+          <div class="dial-c">
+            <div class="dial-n"><span id="jnScore">0</span><span>/100</span></div>
+            <div class="dial-l">综合评分</div>
+          </div>
+        </div>
+        <div class="stamp">不合格 · 需整改</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="wrap strip-in">
+      <div class="kpi"><b class="bad" id="jnKpiCrit" data-cnt="2">0</b><small>致命缺陷</small></div>
+      <div class="kpi"><b class="mid" id="jnKpiHigh" data-cnt="8">0</b><small>严重缺陷</small></div>
+      <div class="kpi"><b class="bad" data-cnt="0">0</b><small>产品页询盘表单</small></div>
+      <div class="kpi"><b class="bad" data-cnt="0">0</b><small>博客内容页</small></div>
+      <div class="kpi"><b class="mid">2.01<span style="font-size:16px">s</span></b><small>TTFB 实测</small></div>
+      <div class="kpi"><b class="mid">177<span style="font-size:16px">KB</span></b><small>PNG Logo 总重</small></div>
+    </div>
+  </div>
+
+  <div class="wrap main">
+    <aside class="rail">
+      <div class="rail-h">检验维度 / Dimensions</div>
+      <div id="jnDims"></div>
+      <div class="filters">
+        <div class="rail-h">严重度筛选</div>
+        <div class="chips" id="jnChips"></div>
+        <input class="search" id="jnSearch" type="search" placeholder="搜索缺陷 / 证据…" aria-label="搜索缺陷">
+        <div class="rail-act">
+          <button class="mini" id="jnExpand">全部展开</button>
+          <button class="mini" id="jnCollapse">全部收起</button>
+        </div>
+      </div>
+    </aside>
+
+    <div>
+      <div class="list-h">
+        <h2>缺陷明细</h2>
+        <div class="count" id="jnCount"></div>
+      </div>
+      <div id="jnList"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="blksec rv">
+      <div class="sec-h"><span class="sec-n">02</span><h2>资源重量解剖</h2></div>
+      <p class="sec-sub">首页实测下载字节（gzip 后）。最刺眼的问题不是产品图，而是三张 PNG 格式的公司 Logo —— 合计 177KB，其中 59KB 那张还被 <code style="font-family:var(--mono);font-size:12px">&lt;link rel="preload"&gt;</code> 当成关键资源优先加载，直接抢占首屏大图的带宽。</p>
+      <div id="jnWeights"></div>
+      <div class="legend">
+        <span><i style="background:#B33A2B"></i>Logo（应转 SVG）</span>
+        <span><i style="background:#B26A00"></i>首屏 / 产品图</span>
+        <span><i style="background:#1B4D8F"></i>脚本</span>
+      </div>
+      <div class="callout">
+        <b>−170KB</b>
+        <p>把三张 PNG Logo 换成 SVG（约 4KB），并移除对 Logo 的 preload、改为 preload 首屏 hero 图。这是全站投入产出比最高的一处改动：半天工作量，首屏关键资源减重约 170KB，LCP 直接受益。产品图压缩走 <strong style="color:#E0A33C">squoosh.app</strong>，转 AVIF/WebP 质量 72 并配 srcset。</p>
+      </div>
+    </section>
+
+    <section class="blksec rv">
+      <div class="sec-h"><span class="sec-n">03</span><h2>性能拆解</h2></div>
+      <p class="sec-sub">curl 实测，采样自本机。注意：gzip 已正确启用（77,136B → 15,458B），所以慢的不是传输体积，而是服务器首字节响应。源站 nginx 在中国大陆、无 CDN 迹象，欧美买家实际体验会比这组数字更差。</p>
+      <div class="perf">
+        <div class="pcell"><div class="pl">DNS 解析</div><div class="pv good">0.015s</div><div class="pn">正常，阿里云 DNS 响应快</div></div>
+        <div class="pcell"><div class="pl">TCP 连接</div><div class="pv good">0.359s</div><div class="pn">跨境链路，尚可</div></div>
+        <div class="pcell"><div class="pl">TLS 握手</div><div class="pv mid">1.47s</div><div class="pn">偏慢，缺会话复用 / OCSP Stapling</div></div>
+        <div class="pcell"><div class="pl">TTFB 首字节</div><div class="pv bad">2.01s</div><div class="pn">核心瓶颈。Google 建议 &lt;0.8s，超标 2.5 倍</div></div>
+        <div class="pcell"><div class="pl">HTML 体积</div><div class="pv good">15.4KB</div><div class="pn">gzip 已启用，压缩后很轻</div></div>
+        <div class="pcell"><div class="pl">未压缩总耗时</div><div class="pv bad">4.75s</div><div class="pn">首次无缓存访问的真实体感</div></div>
+      </div>
+    </section>
+
+    <section class="blksec rv">
+      <div class="sec-h"><span class="sec-n">04</span><h2>整改路线图</h2></div>
+      <p class="sec-sub">按"先止血、再补基建、后做增长"排序。P0 是不做就等于白建站的项，合计约 4 人日即可让站点从"摆设"变成"能收询盘"。</p>
+      <div class="road">
+        <div class="rcol">
+          <div class="rhead p0"><h3>P0 止血</h3><span>≈ 4 人日</span></div>
+          <ul>
+            <li>43 个产品页内嵌 <code>RFQ 询盘表单</code>，型号自动预填</li>
+            <li>表单换插件 + Turnstile 反垃圾 + <strong>图纸附件上传</strong> + 自动回执</li>
+            <li>验证并配置 <code>SPF / DKIM / DMARC</code>，否则回盘进垃圾箱</li>
+            <li>Logo 转 SVG，移除 Logo 的 preload</li>
+            <li>删除主题硬编码的 <code>robots</code> 标签，消除冲突</li>
+            <li>撤下无法验真的 IATF 声明，或补证书扫描件</li>
+          </ul>
+        </div>
+        <div class="rcol">
+          <div class="rhead p1"><h3>P1 基建</h3><span>≈ 5 人日</span></div>
+          <ul>
+            <li>上 CDN + 页面缓存，把 TTFB 压到 0.8s 以内</li>
+            <li>关闭 WooCommerce 购物车，全站改询盘制</li>
+            <li>dequeue 无关电商 JS，移除 <code>jquery-migrate</code></li>
+            <li>Google Fonts 改自托管 woff2 子集</li>
+            <li>社交链接：建真实主页或整块删除裸域名链接</li>
+            <li>统一厂址与工商主体名，补营业执照</li>
+            <li>canonical 补尾斜杠、og:type 改 website、合并双 sitemap</li>
+            <li>nginx 补安全响应头，关闭 xmlrpc</li>
+          </ul>
+        </div>
+        <div class="rcol">
+          <div class="rhead p2"><h3>P2 增长</h3><span>持续投入</span></div>
+          <ul>
+            <li>建 <code>/blog/</code>，30 篇选型/标准长尾内容起步</li>
+            <li>每 SKU 补 6–8 张证据图：尺寸图、盐雾、包装、装机</li>
+            <li>做 PDF Catalogue，留邮箱换取（线索捕获）</li>
+            <li>产品线收敛：主站聚焦喉箍，机加工/冲压拆出去</li>
+            <li>要么真做中文站，要么彻底删掉 <code>/zh/</code> 空壳路径</li>
+            <li>域名续费 5–10 年，去掉短注册期信号</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="blksec rv">
+      <div class="sec-h"><span class="sec-n">05</span><h2>可直接套用的补丁</h2></div>
+      <p class="sec-sub">以下五段针对已实测确认的具体缺陷，可直接交给建站方执行。</p>
+      <div id="jnSnips"></div>
+    </section>
+
+    <section class="blksec rv">
+      <div class="verify">
+        <h3>本次未能验证的一项</h3>
+        <p>邮件认证记录（SPF / DKIM / DMARC / MX）<strong>无法核实</strong>：本机对 dns.google 与 cloudflare-dns.com 的 DoH 查询均返回 <span class="mono">http=000</span>（网络不可达），因此不能断言其缺失。但域名 2026-11-04 才注册、仅 8 天，新域名未配邮件认证的概率很高，而这直接决定询盘回盘是否进垃圾箱。请在本地执行以下三条命令确认：</p>
+        <pre>nslookup -type=TXT jinnuoparts.com
+nslookup -type=TXT _dmarc.jinnuoparts.com
+nslookup -type=MX  jinnuoparts.com</pre>
+      </div>
+    </section>
+
+    <footer>
+      <div>检验方法：curl 抓取原始 HTML / 响应头 / 资源字节，Verisign RDAP 取域名注册记录，站点 sitemap.xml 取 URL 全量，DoH 查 DNS（未通）。</div>
+      <div>证据来源：<a href="https://jinnuoparts.com/" target="_blank" rel="noopener">jinnuoparts.com</a> · <a href="https://jinnuoparts.com/sitemap.xml" target="_blank" rel="noopener">sitemap.xml</a> · <a href="https://jinnuoparts.com/robots.txt" target="_blank" rel="noopener">robots.txt</a> · <a href="https://rdap.verisign.com/com/v1/domain/jinnuoparts.com" target="_blank" rel="noopener">Verisign RDAP</a> · <a href="https://www.1688.com/factory/b2b-2218660914009d177a.html" target="_blank" rel="noopener">1688 工商黄页</a></div>
+      <div style="margin-top:8px;color:#9AA2AC">评分为本次抽样的工程判断，非 Google 官方指标。所有字节数与耗时均为单次实测，受本机网络影响。</div>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  var cs=document.currentScript;
+  var root=(cs&&cs.closest&&cs.closest('.jn-audit'))||document.querySelector('.jn-audit');
+  if(!root)return;
+  var $=function(s){return root.querySelector(s)};
+  var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+
+  var DIMS=[
+    {k:'conv',n:'询盘转化',s:32,w:.25},
+    {k:'perf',n:'性能加载',s:45,w:.20},
+    {k:'seo', n:'技术 SEO',s:58,w:.15},
+    {k:'cont',n:'内容覆盖',s:22,w:.15},
+    {k:'trust',n:'信任合规',s:40,w:.15},
+    {k:'sec', n:'安全基建',s:55,w:.10}
+  ];
+  var SEV={crit:{l:'致命',c:'#B33A2B'},high:{l:'严重',c:'#B26A00'},med:{l:'中等',c:'#1B4D8F'},low:{l:'轻微',c:'#2C6E52'}};
+
+  var F=[
+  {id:'A-01',d:'conv',sev:'crit',t:'43 个产品页没有任何询盘表单',eff:'2–3 人日',
+   ev:'产品页唯一 form 元素：\n<form role="search" method="get" action="https://jinnuoparts.com/">\n\ntype="email" 出现次数：0\n"Inquiry" 出现次数：0\nadd-to-cart 出现次数：4',
+   im:'买家在页面看完规格、MOQ、交期，产生询价意图的那一刻，页面上没有任何可填写的入口，必须自行跳转到 /contact/。B2B 站每增加一跳，询盘流失通常在 40–60%。这是全站最致命的问题——43 个产品页等于 43 个断头路。',
+   fx:'每个产品页内嵌常驻 RFQ 表单（移动端底部吸底），字段：型号（自动预填当前 SKU）、数量、材质 201/304/316、尺寸、目的港、邮箱、附件。提交后原地显示成功态，不跳页。'},
+  {id:'A-02',d:'conv',sev:'high',t:'表单裸写 admin-post.php，无插件、无反垃圾、无附件',eff:'1–2 人日',
+   ev:'/contact/ 表单：\n<form method="post" action="/wp-admin/admin-post.php">\n\ninput 统计：email ×1、hidden ×3、search ×1\ntextarea ×1\nwpforms / contact-form-7 / wpcf7 / fluentform 命中：0',
+   im:'手写表单走 admin-post 处理，意味着没有成熟的反垃圾、没有附件上传、没有自动回执、没有提交记录后台。汽配询盘刚需是发图纸和规格表，收不了附件就等于收不了有效询盘；没有验证码则会被垃圾提交淹没。',
+   fx:'换 FluentForms 或 CF7，加 Cloudflare Turnstile，开启附件上传（限 PDF/DWG/STEP，10MB），配置买家自动回执 + 内部通知， submissions 落库并接 Webhook 到 CRM。'},
+  {id:'A-03',d:'conv',sev:'high',t:'重度依赖 WhatsApp，邮件通道认证未验证',eff:'0.5 人日',
+   ev:'产品页：wa.me 链接 ×7、mailto ×3\n域名注册日：2026-11-04（仅 8 天）\nSPF / DKIM / DMARC / MX：本次 DoH 查询 http=000，未能验证',
+   im:'欧美工业采购的主通道是邮件而非 WhatsApp。一个 8 天新的域名若未配置 SPF/DKIM/DMARC，发给 Gmail/Outlook 的报价邮件极可能直接进垃圾箱——询盘收到了也谈不成。',
+   fx:'本地 nslookup 三条命令确认现状；配置 SPF、DKIM、DMARC（p=quarantine 起步），使用企业邮箱而非免费邮箱发信，新域名先做 2–4 周发信预热。'},
+  {id:'A-04',d:'conv',sev:'med',t:'WooCommerce 购物车与 B2B 询盘模式互相打架',eff:'0.5 人日',
+   ev:'/shop/ /cart/ /checkout/ /my-account/ 均返回 HTTP 200\n产品页 add-to-cart 出现 4 次\n产品页同时出现 MOQ ×5、Lead time ×2',
+   im:'一边写 MOQ 和交期（典型询盘制），一边给出加入购物车和结算（零售制），买家会困惑到底能不能直接下单。购物车流程还会产生大量无意义的空 carts 与 abandoned checkout 数据。',
+   fx:'关闭 WooCommerce 购物车与结算，产品页主 CTA 统一为 Request a Quote；保留 Woo 仅作产品目录管理，或彻底换成自定义 post type。'},
+
+  {id:'B-01',d:'perf',sev:'high',t:'TTFB 2.01 秒，服务器响应是核心瓶颈',eff:'1 人日',
+   ev:'curl --compressed 实测：\n  ttfb=2.010s  total=2.011s  size=15,458B\n未压缩：\n  ttfb=2.690s  total=4.750s  size=77,136B\n\n响应头：Server: nginx\nStrict-Transport-Security: max-age=31536000\n（无任何 CDN 标识头）',
+   im:'gzip 后 HTML 只有 15.4KB，传输几乎不耗时，2 秒全花在等服务器出第一个字节。Google 建议 TTFB < 0.8s，此处超标 2.5 倍。源站在中国大陆且无 CDN，欧美买家实际会更慢，直接影响 Core Web Vitals 与询盘意愿。',
+   fx:'前置 Cloudflare CDN + 全页缓存（WP Rocket / FlyingPress），PHP 升 8.3，开 OPcache 与 Redis 对象缓存；目标 TTFB < 0.5s。若预算允许，源站迁至海外节点。'},
+  {id:'B-02',d:'perf',sev:'high',t:'三张 PNG Logo 共 177KB，且其中一张被 preload',eff:'0.5 人日',
+   ev:'logo-512.png      91,471 B\nlogo-h-gold.png   59,175 B\nlogo-h-navy.png   27,118 B\n合计             177,764 B\n\n文档 head 区块中：\n<link rel="preload" as="image"\n      href=".../img/logo-h-gold.png">',
+   im:'Logo 是纯色矢量图形，用 PNG 存储纯属浪费——59KB 的装饰性 Logo 被标记为 preload 关键资源，与真正决定 LCP 的首屏大图抢带宽。这是全站最容易修、收益最大的一处。',
+   fx:'三张 Logo 全部转 SVG（合计约 4KB），删除对 Logo 的 preload，改为 preload hero 图并加 fetchpriority="high"。预计首屏关键资源减重约 170KB。'},
+  {id:'B-03',d:'perf',sev:'med',t:'不做线上交易，却加载完整电商 JS 栈',eff:'0.5 人日',
+   ev:'jquery.min.js          30,633 B\njquery-migrate.min.js   4,881 B\nsourcebuster.min.js     4,817 B\njquery.blockUI.min.js   3,547 B\nadd-to-cart.min.js      1,444 B\norder-attribution.js    1,150 B\njs.cookie.min.js          833 B\nwoocommerce.min.js      1,534 B',
+   im:'一个纯询盘制 B2B 站背上了整套购物车、订单归因、来源追踪脚本。jquery-migrate 更是纯历史兼容包袱，现代主题根本不需要。这些脚本阻塞主线程、拖慢可交互时间。',
+   fx:'按页面条件 dequeue 无关 WooCommerce 脚本；移除 jquery-migrate；sourcebuster/order-attribution 若不做归因分析直接关掉。'},
+  {id:'B-04',d:'perf',sev:'med',t:'Google Fonts 外链，阻塞渲染且有欧盟合规风险',eff:'0.5 人日',
+   ev:'<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n\nfonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+   im:'字体依赖第三方域名，增加一次 DNS + 连接开销；欧盟法院（LG München 2022）已判定动态加载 Google Fonts 违反 GDPR，对德国买家是实际法律风险；部分地区该域名不可达会导致字体长时间空白。',
+   fx:'下载 Inter 的 woff2 拉丁子集自托管，用 @font-face + font-display:swap 本地引入，删除两个 preconnect。'},
+  {id:'B-05',d:'perf',sev:'low',t:'首屏大图 97KB，仍有压缩空间',eff:'0.2 人日',
+   ev:'hero.webp                97,718 B\nt-bolt-hose-clamp.webp   83,692 B\nearless-endless.webp     45,510 B\n\n首页 img 标签 10 个，其中 loading="lazy" 仅 6 个',
+   im:'图片已用 WebP，方向正确，但首屏图接近 100KB 仍偏重，且缺响应式 srcset，移动端在下载桌面尺寸的大图。',
+   fx:'走 squoosh.app 转 AVIF/WebP 质量 72，导出 480/960/1600 三档配 srcset 与 sizes；非首屏图全部补 loading="lazy" 与 decoding="async"。'},
+
+  {id:'C-01',d:'seo',sev:'high',t:'robots meta 双标签互相矛盾',eff:'0.2 人日',
+   ev:'/cart/ 与 /my-account/ 同时输出两条：\n\n主题硬编码：\n<meta name="robots" content="index, follow, max-image-preview:large">\n\nWooCommerce 输出：\n<meta name=\'robots\' content=\'max-image-preview:large, noindex, follow\' />\n\n/shop/ 只有 index,follow —— 无 noindex 保护',
+   im:'同一页面出现两条互斥的索引指令。Google 目前取最严格值合并，所以侥幸没出事，但这是定时炸弹：规则或插件一变动，购物车、账户页这类薄内容页就会被放出去索引，稀释站点质量评分。',
+   fx:'删除主题 header 里硬编码的 robots meta，统一交给 Yoast/RankMath 或 WP 核心管理；给 shop/cart/checkout/my-account 显式设 noindex,follow。'},
+  {id:'C-02',d:'seo',sev:'med',t:'canonical 与 og:url 缺尾斜杠，与实际 URL 不一致',eff:'0.1 人日',
+   ev:'<link rel="canonical" href="https://jinnuoparts.com">\n<meta property="og:url" content="https://jinnuoparts.com">\n\n而 hreflang 与实际访问 URL 均为：\nhttps://jinnuoparts.com/',
+   im:'canonical 指向的是会 301 跳转的非规范版本。虽然搜索引擎通常能容错，但等于主动制造一层跳转与信号歧义，属于零成本可消除的瑕疵。',
+   fx:'canonical 与 og:url 统一输出带尾斜杠的完整规范 URL，与实际 200 响应的 URL 逐字一致。'},
+  {id:'C-03',d:'seo',sev:'med',t:'hreflang 残缺，中文站是空壳路径',eff:'0.5 人日',
+   ev:'全站 hreflang 仅一条：\n<link rel="alternate" href="https://jinnuoparts.com/" hreflang="en" />\n无 x-default\n\n/zh/about-us/  → 301 → /about-us/\n/en/about/     → 301 → /about-us/\nsitemap.xml 中 /zh/ 或 /en/ 命中数：0',
+   im:'好消息是跳转做对了，没有产生重复内容（此处修正上一轮报告的误判）。坏消息是所谓"多语言"根本不存在：/zh/ 只是装饰性路径，点进去还是英文，也没有中文公司名与地址。对国内验厂方与海外华商买家都是信任缺口。',
+   fx:'二选一：要么真做中文站（独立 URL + 完整 hreflang 互指 + x-default + 中文工商主体信息），要么彻底移除 /zh/ 路径与语言切换入口，别留空壳。'},
+  {id:'C-04',d:'seo',sev:'med',t:'社交链接与 schema sameAs 全指向裸域名',eff:'0.5 人日',
+   ev:'Organization 结构化数据：\n"sameAs":["https://www.linkedin.com/",\n          "https://www.facebook.com/"]\n\n页面内链接统计：\nlinkedin.com ×2  facebook.com ×2\nx.com ×1  youtube.com ×1\n（均为平台首页，非公司主页）',
+   im:'买家点页脚的 LinkedIn 图标，落到的是 LinkedIn 首页而不是公司主页——这是专业采购一眼识破的"门面工程"信号，信任瞬间崩塌。同时 Google 无法通过 sameAs 把网站与真实企业实体关联，E-E-A-T 受损。',
+   fx:'先建真实的公司 LinkedIn / Facebook 主页并填充内容，再回填精确 URL；短期内建不了就把社交图标整块删掉，留空比留假好。'},
+  {id:'C-05',d:'seo',sev:'low',t:'首页 og:type 误用 article',eff:'0.1 人日',
+   ev:'<meta property="og:type" content="article">',
+   im:'首页被标记为文章类型，社交分享与部分聚合器会按文章处理，缺 article 必填属性时展示异常。',
+   fx:'首页改 website，产品页改 product（或 product.item），文章页才用 article。'},
+  {id:'C-06',d:'seo',sev:'low',t:'robots.txt 声明了两个 sitemap',eff:'0.1 人日',
+   ev:'Sitemap: https://jinnuoparts.com/wp-sitemap.xml\nSitemap: https://jinnuoparts.com/sitemap.xml\n\n两者均返回 HTTP 200',
+   im:'WP 核心 sitemap 与插件 sitemap 同时存在并被声明，抓取预算浪费在重复 URL 上，Search Console 里也会出现两套数据难以对账。',
+   fx:'保留插件 sitemap，关闭 WP 核心 wp-sitemap（remove_action init wp_sitemaps_get_server），robots.txt 只留一条声明。'},
+  {id:'C-07',d:'seo',sev:'low',t:'Organization schema 地址与成立日期不完整',eff:'0.1 人日',
+   ev:'"address":{"@type":"PostalAddress",\n  "addressLocality":"Ruian",\n  "addressRegion":"Zhejiang",\n  "addressCountry":"CN"}\n缺 streetAddress、postalCode\n\n"foundingDate":"2011"  ← 非完整 ISO 日期',
+   im:'NAP（名称/地址/电话）信息不完整，本地实体信号弱；foundingDate 只写年份不符合 schema.org 的 Date 类型期望。',
+   fx:'补 streetAddress 与 postalCode，且必须与工商登记一致；foundingDate 改 "2011-09-05"；补中文法定名称 alternateName。'},
+
+  {id:'D-01',d:'cont',sev:'crit',t:'零内容营销：52 个 URL 里没有一篇博客',eff:'持续投入',
+   ev:'sitemap.xml 全量 52 条 URL：\n  产品页 43 条\n  功能页 9 条（about/quality/contact/\n           cases/faq/applications/shop/cart…）\n  博客 / 新闻 / 技术文章：0 条\n\n所有产品页 lastmod 均为 2026-11-12',
+   im:'喉箍品类的海外搜索量绝大部分集中在信息词：hose clamp size chart、DIN 3017、SAE J1508、worm drive vs ear clamp、how to measure a hose clamp、304 vs 316 clamp。站点完全没有覆盖，意味着只能吃自己的品牌词——而一个 8 天新域名没有任何品牌搜索量。等于建好了柜台却没开在街上。',
+   fx:'建 /blog/ 与 /guides/，先做 30 篇选型与标准对照长尾文（尺寸对照表、DIN/SAE 标准解读、材质耐蚀对比、单耳 vs 蜗杆选型、安装扭矩、失效案例），每篇内链到对应产品页形成主题簇。'},
+  {id:'D-02',d:'cont',sev:'high',t:'产品页视觉证据严重不足，仅 4 张图',eff:'3–5 人日',
+   ev:'产品页 <img> 标签数：4\n其中 loading="lazy"：1\nalt 覆盖：4/4（这项做得对）\n\n未见：尺寸图纸 / 包装图 /\n      盐雾测试图 / 装机应用实拍',
+   im:'工业五金采购的决策依据是尺寸图纸、材质证明和实测数据，不是渲染图。4 张图不足以支撑一次专业询盘，买家还得发邮件问尺寸——而 A-01 已经证明产品页连表单都没有。',
+   fx:'每个主力 SKU 补 6–8 张：带公差标注的尺寸图、材质光谱报告、盐雾试验照片、包装与装箱方式、真实装机场景、产线生产照。alt 已有的好习惯保持。'},
+  {id:'D-03',d:'cont',sev:'med',t:'无 PDF Catalogue 下载',eff:'1 人日',
+   ev:'全站未检出 catalogue / brochure\nPDF 下载入口',
+   im:'汽配采购的标准动作是把供应商 catalogue 转发给工程部与采购委员会评审。没有可下载的产品册，等于在买家内部流转环节被淘汰。',
+   fx:'做一份含完整规格表、材质、认证、包装信息的 PDF Catalogue，用"留邮箱换取下载"实现线索捕获，比裸放 PDF 更有价值。'},
+  {id:'D-04',d:'cont',sev:'med',t:'产品线过散，稀释主题权威度',eff:'1 人日规划',
+   ev:'43 个 SKU 横跨：\n单耳/美式/德式/T型/V型/弹簧/PEX 卡箍\n+ er-collet-chuck（ER 夹头）\n+ hex-socket-driver（内六角批头）\n+ straight-injector-nozzle（直喷油嘴）\n+ bronze-bush-nut（铜衬套螺母）\n+ aluminium-bracket、各类冲压件\n\n1688 另挂"气动打钉机"',
+   im:'从卡箍到机床夹头到喷油嘴，跨度大到搜索引擎无法判定站点主题，喉箍核心词的权重被无关品类稀释。对买家也传递"什么都做=什么都不精"的印象。',
+   fx:'主站聚焦 hose clamp 做深做透；机加工件与冲压件收进 /custom-machining/ 子目录作为产能背书，或另开独立站；杂项贸易品直接下架。'},
+
+  {id:'E-01',d:'trust',sev:'high',t:'认证声明自相矛盾，IATF 编号格式可疑',eff:'1 人日',
+   ev:'/en/about/ 列出：\n  IATF 16949  证书号 TT-1949990\n  ISO 9001    证书号 0482025Q0392R0S\n\n/quality/ 页：\n  无任何证书编号、无签发机构、\n  无有效期、无证书图、无 PDF 下载\n  仅写 "SGS reports available"',
+   im:'标准 IATF 16949 证书号格式为 IATF + 7 位数字 + CB 代码，"TT-1949990" 不符合该格式。ISO 编号内含 2025 说明 2025 年才首次发证，与"15 年汽车传动系统配套经验"的叙事张力明显。专业采购会去 IATF 官方数据库核验，查不到即判定虚假宣传，比不写更糟。',
+   fx:'上传证书扫描件（含机构、编号、有效期、认证范围），去 CNCA（cx.cnca.cn）与 IATF 官方数据库验真；验不出来就立刻撤下 IATF 声明，只保留可核实的部分。'},
+  {id:'E-02',d:'trust',sev:'high',t:'官网厂址与工商注册地址不一致',eff:'0.5 人日',
+   ev:'官网 /contact/：\n  No. 27 Zhongye Road, Tangxia Town,\n  Ruian City, Zhejiang, China\n\n工商登记 / 1688 黄页：\n  浙江省温州市瑞安市塘下镇\n  八水村康卫路10弄2号',
+   im:'同镇不同路。可能是注册地与实际厂址分离（常见），但网站没有任何说明，买家做尽调或安排验厂时第一步就卡住，直接触发信任警报。',
+   fx:'明确区分并标注 Registered Address 与 Factory Address；统一对外口径，补中文法定公司全称"瑞安市金诺汽配有限公司"与统一社会信用代码。'},
+  {id:'E-03',d:'trust',sev:'med',t:'规模数据全为自述，无第三方佐证',eff:'2 人日',
+   ev:'官网宣称：\n  厂房 5,000 ㎡ / 员工 80+ 人\n  年产能 9,600 万件 / 出口 20+ 国\n\n工商注册资本：300 万元人民币\n参保人数：未能获取（需登录企查查）\n海关提单记录：未查到',
+   im:'300 万注册资本的小微企业宣称 80 人 5000 平米并非不可能（厂房可租赁），但没有任何影像或数据支撑，且未查到出口记录，"出口 20+ 国"存疑。',
+   fx:'补车间实拍视频、设备清单与铭牌照、产线照片、团队合影；出口国家用真实提单或报关单佐证；能公开的话展示社保人数区间。'},
+  {id:'E-04',d:'trust',sev:'med',t:'全站无中文工商主体信息',eff:'0.5 人日',
+   ev:'/zh/about-us/ 正文仍为英文\n全站未出现"瑞安市金诺汽配有限公司"\n未出现统一社会信用代码\n未出现营业执照影像\n页脚：© 2026 JINNUO Auto Parts Co., Ltd.',
+   im:'"JINNUO Auto Parts Co., Ltd." 不是中国工商登记的法定名称，海外买家做背景核查时无法把网站对应到真实注册主体，中间隔了一层无法穿透的墙。',
+   fx:'页脚补中文法定全称 + 统一社会信用代码 + 营业执照缩略图（可点开），About 页补中文简介段落。'},
+
+  {id:'F-01',d:'sec',sev:'med',t:'安全响应头缺失（HSTS 除外）',eff:'0.2 人日',
+   ev:'已存在：\n  Strict-Transport-Security: max-age=31536000 ✓\n\n缺失：\n  X-Content-Type-Options\n  X-Frame-Options\n  Content-Security-Policy\n  Referrer-Policy\n  Permissions-Policy',
+   im:'缺 MIME 嗅探防护与点击劫持防护，表单页可被 iframe 嵌套做钓鱼。对一个要收买家邮箱和图纸的站点，这是基础卫生问题。',
+   fx:'nginx 补齐五个响应头，CSP 先用 Report-Only 模式跑一周再强制。'},
+  {id:'F-02',d:'sec',sev:'med',t:'WordPress 指纹与 xmlrpc 完全暴露',eff:'0.3 人日',
+   ev:'<link rel="EditURI" type="application/rsd+xml"\n      href="https://jinnuoparts.com/xmlrpc.php?rsd" />\n<link rel="https://api.w.org/" href="/wp-json/" />\n\n可见版本：Astra 4.14.2 / Woo 10.7.0\n自定义资源路径：/wp-content/uploads/jinno/',
+   im:'xmlrpc.php 是 WordPress 暴力破解与 DDoS 放大的经典入口；插件版本号全暴露便于攻击者比对已知漏洞。自定义资源放在 uploads 目录也说明主题非标准结构，升级维护有隐患。',
+   fx:'禁用 xmlrpc（插件或 nginx deny）、限制 wp-json 未认证访问、移除版本号与 EditURI/RSD 头、前置 WAF、后台改路径并强制 2FA。'},
+  {id:'F-03',d:'sec',sev:'low',t:'域名仅注册 1 年',eff:'0.1 人日',
+   ev:'Verisign RDAP：\n  registration : 2026-11-04\n  expiration   : 2027-11-04\n  registrar    : Alibaba Cloud / HiChina\n  nameservers  : DNS7/8.HICHINA.COM\n  status       : active',
+   im:'短注册期是垃圾站与短期项目的常见信号之一，部分风控与邮件服务商会据此降低信任分。更现实的风险是：忘记续费则网站与企业邮箱同时归零。',
+   fx:'一次性续费 5–10 年，开启自动续费与到期提醒；域名与邮箱的管理权务必握在企业自己手里而非建站方。'},
+  {id:'F-04',d:'sec',sev:'low',t:'邮件认证记录本次未能验证（待补）',eff:'0.1 人日',
+   ev:'dns.google/resolve      → http=000\ncloudflare-dns.com/dns-query → http=000\n\n（本机网络对 DoH 不可达，\n  非"记录不存在"的证据）',
+   im:'不能据此断言 SPF/DKIM/DMARC 缺失。但结合域名仅 8 天新，未配置的概率很高，需本地补验后再定结论。',
+   fx:'本地执行 nslookup -type=TXT jinnuoparts.com、nslookup -type=TXT _dmarc.jinnuoparts.com、nslookup -type=MX jinnuoparts.com，按结果补齐。'}
+  ];
+
+  var WEIGHTS=[
+    {n:'logo-512.png',v:91471,c:'#B33A2B'},
+    {n:'hero.webp',v:97718,c:'#B26A00'},
+    {n:'t-bolt-hose-clamp.webp',v:83692,c:'#B26A00'},
+    {n:'logo-h-gold.png ⚠preload',v:59175,c:'#B33A2B'},
+    {n:'earless-endless.webp',v:45510,c:'#B26A00'},
+    {n:'v-band-clamp.webp',v:41284,c:'#B26A00'},
+    {n:'custom-machined-part.webp',v:41100,c:'#B26A00'},
+    {n:'single-ear-clamp-8mm.webp',v:32216,c:'#B26A00'},
+    {n:'jquery.min.js',v:30633,c:'#1B4D8F'},
+    {n:'american-type-clamp.webp',v:30488,c:'#B26A00'},
+    {n:'logo-h-navy.png',v:27118,c:'#B33A2B'},
+    {n:'jquery-migrate.min.js',v:4881,c:'#1B4D8F'},
+    {n:'sourcebuster.min.js',v:4817,c:'#1B4D8F'}
+  ];
+
+  var SNIPS=[
+    {t:'消除 robots 标签冲突',c:'C-01',code:
+'// functions.php —— 删掉主题里硬编码的那条 robots，\n// 只保留一处来源，避免与 WooCommerce 的 noindex 打架\nremove_action(\'wp_head\',\'rel_canonical\');\nadd_action(\'wp_head\',function(){\n  if (is_singular()) {\n    echo \'<link rel="canonical" href="\'.esc_url(get_permalink()).\'" />\';\n  }\n});\n\n// 购物车 / 结算 / 账户页显式 noindex\nadd_filter(\'wp_robots\',function($robots){\n  if (is_cart() || is_checkout() || is_account_page()) {\n    $robots[\'noindex\'] = true;\n    unset($robots[\'index\']);\n  }\n  return $robots;\n});'},
+    {t:'Logo 转 SVG 并修正 preload 优先级',c:'B-02',code:
+'<!-- 删除这一行：59KB 的装饰性 PNG 不该是关键资源 -->\n<!-- <link rel="preload" as="image" href="logo-h-gold.png"> -->\n\n<!-- 改为 preload 真正决定 LCP 的首屏图 -->\n<link rel="preload" as="image" href="/img/hero.avif"\n      fetchpriority="high">\n\n<!-- Logo 用内联 SVG，约 4KB，无需额外请求 -->\n<a href="/" class="brand" aria-label="JINNUO 首页">\n  <svg viewBox="0 0 180 40" role="img">…</svg>\n</a>'},
+    {t:'产品页内嵌 RFQ 询盘表单',c:'A-01',code:
+'<!-- 放在每个产品页规格表之后，型号自动预填 -->\n<form class="rfq" method="post" enctype="multipart/form-data">\n  <input type="hidden" name="sku"\n         value="<?php echo esc_attr(get_the_title()); ?>">\n  <input type="email" name="email" required\n         placeholder="Your business email">\n  <input type="number" name="qty" min="1" required\n         placeholder="Quantity (pcs)">\n  <select name="material">\n    <option>SS304</option><option>SS316</option><option>SS201</option>\n  </select>\n  <input type="text" name="size" placeholder="Size / band width (mm)">\n  <input type="text" name="port" placeholder="Destination port">\n  <input type="file" name="drawing"\n         accept=".pdf,.dwg,.step,.stp,.jpg,.png">\n  <textarea name="msg" rows="3"\n            placeholder="Tolerance, packaging, target price…"></textarea>\n  <button type="submit">Send Inquiry</button>\n</form>\n<!-- 后端：FluentForms/CF7 + Turnstile + 自动回执 + 落库 -->'},
+    {t:'修正 Organization 结构化数据',c:'C-04 / C-07',code:
+'{\n  "@context": "https://schema.org",\n  "@type": "Organization",\n  "name": "JINNUO Auto Parts Co., Ltd.",\n  "alternateName": "瑞安市金诺汽配有限公司",\n  "url": "https://jinnuoparts.com/",\n  "foundingDate": "2011-09-05",\n  "email": "mia.gong@jinnuoparts.com",\n  "telephone": "+86-178-2691-9686",\n  "address": {\n    "@type": "PostalAddress",\n    "streetAddress": "塘下镇八水村康卫路10弄2号",\n    "addressLocality": "Ruian",\n    "addressRegion": "Zhejiang",\n    "postalCode": "325204",\n    "addressCountry": "CN"\n  }\n}\n// sameAs：建好真实公司主页后再填精确 URL；\n// 建不了就整块删除，切勿指向 linkedin.com 首页。'},
+    {t:'nginx 安全头与 xmlrpc 封堵',c:'F-01 / F-02',code:
+'add_header X-Content-Type-Options "nosniff" always;\nadd_header X-Frame-Options "SAMEORIGIN" always;\nadd_header Referrer-Policy "strict-origin-when-cross-origin" always;\nadd_header Permissions-Policy "geolocation=(), microphone=()" always;\n# CSP 先跑 Report-Only，观察一周后再切强制\nadd_header Content-Security-Policy-Report-Only\n  "default-src \'self\'; img-src \'self\' data:; style-src \'self\'" always;\n\nlocation = /xmlrpc.php { deny all; access_log off; }\nlocation = /wp-json/wp/v2/users { deny all; }\n\n# 关闭 WP 核心 sitemap，只保留插件那一套\n# functions.php:\n# remove_action(\'init\',\'wp_sitemaps_get_server\');'}
+  ];
+
+  /* ── render dimensions ── */
+  var activeDim='all', activeSev='all', q='';
+  var dimBox=$('#jnDims');
+  var allBtn=document.createElement('button');
+  allBtn.className='dim on'; allBtn.dataset.k='all';
+  allBtn.innerHTML='<div class="dim-t"><span class="dim-n">全部维度</span><span class="dim-s">'+F.length+'</span></div>';
+  dimBox.appendChild(allBtn);
+  DIMS.forEach(function(d){
+    var n=F.filter(function(f){return f.d===d.k}).length;
+    var b=document.createElement('button');
+    b.className='dim'; b.dataset.k=d.k;
+    b.innerHTML='<div class="dim-t"><span class="dim-n">'+d.n+'</span><span class="dim-s">'+d.s+'</span></div>'+
+                '<div class="bar"><i data-w="'+d.s+'" style="background:'+scoreColor(d.s)+'"></i></div>';
+    b.title=d.n+' · '+n+' 项缺陷 · 权重 '+Math.round(d.w*100)+'%';
+    dimBox.appendChild(b);
+  });
+  function scoreColor(s){return s<35?'#B33A2B':s<55?'#B26A00':s<70?'#1B4D8F':'#2C6E52'}
+
+  var chipBox=$('#jnChips');
+  [['all','全部'],['crit','致命'],['high','严重'],['med','中等'],['low','轻微']].forEach(function(p){
+    var b=document.createElement('button');
+    b.className='chip'+(p[0]==='all'?' on':''); b.dataset.s=p[0];
+    b.textContent=p[1]+(p[0]==='all'?'':' '+F.filter(function(f){return f.sev===p[0]}).length);
+    chipBox.appendChild(b);
+  });
+
+  /* ── render findings ── */
+  var list=$('#jnList');
+  function render(){
+    var shown=F.filter(function(f){
+      if(activeDim!=='all'&&f.d!==activeDim)return false;
+      if(activeSev!=='all'&&f.sev!==activeSev)return false;
+      if(q){var hay=(f.id+f.t+f.ev+f.im+f.fx).toLowerCase();if(hay.indexOf(q)<0)return false}
+      return true;
+    });
+    $('#jnCount').textContent='显示 '+shown.length+' / '+F.length+' 项';
+    if(!shown.length){list.innerHTML='<div class="empty">无匹配缺陷 —— 换个筛选条件试试</div>';return}
+    list.innerHTML=shown.map(function(f){
+      var dn=(DIMS.filter(function(d){return d.k===f.d})[0]||{}).n||'';
+      return '<article class="f" data-id="'+f.id+'">'+
+        '<div class="f-h" role="button" tabindex="0" aria-expanded="false">'+
+          '<span class="fid">'+f.id+'</span>'+
+          '<span class="sev '+f.sev+'">'+SEV[f.sev].l+'</span>'+
+          '<span class="f-t">'+esc(f.t)+'</span>'+
+          '<span class="f-d">'+dn+'</span>'+
+          '<span class="caret">▸</span>'+
+        '</div>'+
+        '<div class="f-b">'+
+          '<div class="blk"><div class="blk-l">实测证据</div><div class="ev">'+esc(f.ev)+'</div></div>'+
+          '<div class="blk"><div class="blk-l">影响分析</div><p>'+esc(f.im)+'</p></div>'+
+          '<div class="blk"><div class="blk-l">修复方案</div><div class="fix">'+esc(f.fx)+'</div></div>'+
+          '<span class="eff">预估工作量 '+esc(f.eff)+'</span>'+
+        '</div></article>';
+    }).join('');
+  }
+  render();
+
+  list.addEventListener('click',function(e){
+    var h=e.target.closest('.f-h'); if(!h)return;
+    var a=h.parentElement; var open=a.classList.toggle('open');
+    h.setAttribute('aria-expanded',open?'true':'false');
+  });
+  list.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    var h=e.target.closest('.f-h'); if(!h)return;
+    e.preventDefault(); h.click();
+  });
+
+  dimBox.addEventListener('click',function(e){
+    var b=e.target.closest('.dim'); if(!b)return;
+    activeDim=b.dataset.k;
+    dimBox.querySelectorAll('.dim').forEach(function(x){x.classList.toggle('on',x===b)});
+    render();
+  });
+  chipBox.addEventListener('click',function(e){
+    var b=e.target.closest('.chip'); if(!b)return;
+    activeSev=b.dataset.s;
+    chipBox.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b)});
+    render();
+  });
+  $('#jnSearch').addEventListener('input',function(e){q=e.target.value.trim().toLowerCase();render()});
+  $('#jnExpand').addEventListener('click',function(){
+    list.querySelectorAll('.f').forEach(function(a){a.classList.add('open');a.querySelector('.f-h').setAttribute('aria-expanded','true')});
+  });
+  $('#jnCollapse').addEventListener('click',function(){
+    list.querySelectorAll('.f').forEach(function(a){a.classList.remove('open');a.querySelector('.f-h').setAttribute('aria-expanded','false')});
+  });
+
+  /* ── weights ── */
+  var max=Math.max.apply(null,WEIGHTS.map(function(w){return w.v}));
+  $('#jnWeights').innerHTML=WEIGHTS.map(function(w){
+    return '<div class="wrow"><span class="wname" title="'+esc(w.n)+'">'+esc(w.n)+'</span>'+
+      '<span class="wtrack"><i class="wfill" data-w="'+(w.v/max*100).toFixed(1)+'" style="background:'+w.c+'"></i></span>'+
+      '<span class="wval">'+(w.v/1024).toFixed(1)+' KB</span></div>';
+  }).join('');
+
+  /* ── snippets ── */
+  $('#jnSnips').innerHTML=SNIPS.map(function(s,i){
+    return '<div class="snip"><div class="snip-h"><span class="snip-t"><code>'+esc(s.c)+'</code>'+esc(s.t)+'</span>'+
+      '<button class="copy" data-i="'+i+'">复制代码</button></div>'+
+      '<pre>'+esc(s.code)+'</pre></div>';
+  }).join('');
+  $('#jnSnips').addEventListener('click',function(e){
+    var b=e.target.closest('.copy'); if(!b)return;
+    var txt=SNIPS[+b.dataset.i].code;
+    var done=function(){b.textContent='已复制 ✓';b.classList.add('done');
+      setTimeout(function(){b.textContent='复制代码';b.classList.remove('done')},1800)};
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(done).catch(function(){fallback(txt,done)});
+    } else fallback(txt,done);
+  });
+  function fallback(txt,cb){
+    var ta=document.createElement('textarea');ta.value=txt;
+    ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);
+    ta.select();try{document.execCommand('copy');cb()}catch(err){}
+    document.body.removeChild(ta);
+  }
+
+  /* ── motion ── */
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var overall=Math.round(DIMS.reduce(function(a,d){return a+d.s*d.w},0));
+
+  function animateScore(){
+    var arc=$('#jnArc'), num=$('#jnScore'), C=2*Math.PI*74;
+    arc.setAttribute('stroke-dasharray',C.toFixed(1));
+    if(reduce){arc.setAttribute('stroke-dashoffset',(C*(1-overall/100)).toFixed(1));num.textContent=overall;return}
+    var t0=null,dur=1400;
+    function step(ts){
+      if(!t0)t0=ts;
+      var p=Math.min((ts-t0)/dur,1), e=1-Math.pow(1-p,3);
+      arc.setAttribute('stroke-dashoffset',(C*(1-overall/100*e)).toFixed(1));
+      num.textContent=Math.round(overall*e);
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  function animateBars(scope){
+    (scope||root).querySelectorAll('[data-w]').forEach(function(el){
+      if(el.dataset.done)return; el.dataset.done='1';
+      var w=el.dataset.w+'%';
+      if(reduce){el.style.width=w}else{requestAnimationFrame(function(){el.style.width=w})}
+    });
+  }
+  function counters(){
+    root.querySelectorAll('[data-cnt]').forEach(function(el){
+      var target=+el.dataset.cnt;
+      if(reduce||target===0){el.textContent=target;return}
+      var t0=null;
+      function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/900,1);
+        el.textContent=Math.round(target*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step)}
+      requestAnimationFrame(step);
+    });
+  }
+
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');animateBars(en.target);io.unobserve(en.target)}});
+    },{threshold:.12});
+    root.querySelectorAll('.rv').forEach(function(el){io.observe(el)});
+  } else {
+    root.querySelectorAll('.rv').forEach(function(el){el.classList.add('in')});
+  }
+
+  /* counts derived from data so they can never drift */
+  $('#jnTotal').textContent=F.length+' 项';
+  $('#jnKpiCrit').dataset.cnt=F.filter(function(f){return f.sev==='crit'}).length;
+  $('#jnKpiHigh').dataset.cnt=F.filter(function(f){return f.sev==='high'}).length;
+
+  animateScore(); counters(); animateBars(dimBox);
+})();
+</script>
+</div>
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var audit = document.querySelector('.jn-audit');
+  if(!audit) return;
+
+  /* build section anchors from the report's own headings */
+  var targets = [];
+  var main = audit.querySelector('.main');
+  if(main){ main.id = 'findings'; targets.push({el:main, label:'缺陷明细'}); }
+  audit.querySelectorAll('.blksec').forEach(function(sec, i){
+    var h = sec.querySelector('.sec-h h2') || sec.querySelector('.verify h3');
+    if(!h) return;
+    sec.id = 'sec-' + (i + 1);
+    targets.push({el:sec, label:h.textContent.trim()});
+  });
+
+  var nav = document.getElementById('tbNav');
+  targets.forEach(function(t){
+    var a = document.createElement('a');
+    a.href = '#' + t.el.id;
+    a.textContent = t.label;
+    nav.appendChild(a);
+    t.link = a;
+  });
+
+  /* scroll spy */
+  function spy(){
+    var line = window.innerHeight * 0.28, best = null;
+    targets.forEach(function(t){
+      var r = t.el.getBoundingClientRect();
+      if(r.top <= line) best = t;
+    });
+    targets.forEach(function(t){ t.link.classList.toggle('on', t === best); });
+  }
+
+  /* reading progress */
+  var prog = document.getElementById('tbProg');
+  function onScroll(){
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = (h > 0 ? Math.min(100, window.scrollY / h * 100) : 0) + '%';
+    spy();
+  }
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(function(){ onScroll(); ticking = false; });
+  }, {passive:true});
+  onScroll();
+
+  /* copy shareable link */
+  var btn = document.getElementById('tbCopy');
+  function done(){
+    btn.textContent = '已复制 ✓'; btn.classList.add('done');
+    setTimeout(function(){ btn.textContent = '复制链接'; btn.classList.remove('done'); }, 1900);
+  }
+  function fallback(text){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly','');
+    ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){}
+    document.body.removeChild(ta);
+  }
+  btn.addEventListener('click', function(){
+    var url = location.href.split('#')[0];
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done).catch(function(){ fallback(url); });
+    } else { fallback(url); }
+  });
+
+  /* expand every finding when printing so nothing is lost on paper */
+  window.addEventListener('beforeprint', function(){
+    audit.querySelectorAll('.f').forEach(function(f){ f.classList.add('open'); });
+    audit.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); });
+    audit.querySelectorAll('[data-w]').forEach(function(el){ el.style.width = el.dataset.w + '%'; });
+  });
+})();
+</script>
+</body>
+</html>
